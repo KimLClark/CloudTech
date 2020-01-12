@@ -1,0 +1,79 @@
+Create Python Azure Function (version 2.x)
+==========================================
+Resources:
+
+    Azure Functions Python developer guide
+	https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-python#python-version-and-package-management
+
+Procedure:
+1. Setup Git and your local repo first (repo should be called EbayTracker).  Create a new branch to work on, using Git Extensions, called feature/CreateAzureFunction. 
+
+2. Fix ability to run powershell scripts by doing the following:
+  a. In VSCode in the terminal window at bottom of the screen:
+     i.   Make sure the dropdown in the terminal window says 1:powershell. If not select it from the dropdown.
+     ii.  At the command prompt, type: Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+     iii. At the command prompt, type: Get-ExecutionPolicy
+     iv.  The result of running the previous command should be: RemoteSigned
+
+3. Create the VSCode Worspace. IMPORTANT, after this you should open the workspace, not individual files.
+   a. In VSCode, on the File menu, select Open Folder. Navigate to your C:\git_repos\EbayTracker folder and click the Select Folder button.
+   b. In VSCode, on the File menu, select Add Folder to Workspace. Navigate to your C:\git_repos\EbayTracker folder and click the Add button.
+   c. In VSCode, on the File menu, select Save Workspace As... Type in EbayTracker and click the Save button.
+   d. This created a file in your C:\git_repos\EbayTracker folder called "EbayTracker.code-workspace". 
+   e. From now on, you should open your project by clicking this file, or doing Open Workspace from the File menu.
+   f. Notice in the workspace bar at the left of the screen, all of your project's files will now be listed.
+
+4. Create an Azure Storage account using the portal (portal.azure.comJ)    
+    a. In your azure resource group, create a new "Storage account - blob, file, table, queue" resource. Name it something related to your ebay tracker project. 
+        i.  NAME RULES: Name must be unique across all storage accounts in Azure. Must be between 6 and 24 characters long, CAN ONLY CONTAIN lowercase letters and numbers. No caps or special characters.
+        ii. Replication: choose Locally-redundant storage (LRS) because this is cheapest.
+
+5. Open the this URL (https://docs.microsoft.com/en-us/azure/python/tutorial-vs-code-serverless-python-01) and follow the Tutorial instructions, up through and INCLUDING the page where you are debugging. YOU WILL NEED this info below to complete the tutorial the way WE need it. So please read this info first, inserting where necessary.
+    a. Prerequisites page
+        i.   You already have a Azure Subscription
+        ii.  You should already have Azure Function Core Tools installed. If you want install again (one line at command line), we are using Azure Function Tools 2.x (NOT 3.x)
+        iii. For VSCode extensions, I thought I had them installed already, but didn't. So double-check and install if not installed. Remember to open the VSCode extensions manager, click on the icon bar on the far left -- the icon that has the four little boxes. 
+             I have the following extensions installed 1) Azure Account, 2) Azure Functions, 3) Python.
+        iv.  Complete the rest of the page, then click on the "I signed into Azure button" when everything is good.
+    b. Create a Python function for Azure Functions page
+        i.   After you click on the Create New Project icon, ENTER THE FOLLOWING VALUES, NOT what the tutorial shows!
+            At prompt "Select the folder that will contain your function project": Select Browse... Then in the browse dialog, under your EbayTracker folder, create a NEW folder called: ActivityLoaderApp, then select that folder and click on the Select button.
+            At prompt "Select a language for your function project": click on "Python"
+            At prompt "Select a Python alias to create a virtual environment": click on "python 3.6.8"
+            At prompt "Select a template for your project's first function": click on "Azure Service Bus Queue trigger"
+            At prompt "Provide a function name": Type, ActivityLoader, and then press <Enter>
+            At prompt "Select setting from "local.settings.json": click on +Create new local app setting
+            At prompt "Select a service bus namespace": it should prompt you with the name of your service bus, so click on this name (for example I named my service bus kim-poc, and that showed up on the list). If not there, then click on skip for now.
+            At prompt "The queue for which the message will be read": type in the queue name you created using Service Bus Explorer. Go to Service Bus Explorer, click on your queue, and then copy the name from the right panel. Press <Enter> when done.
+        ii. It will create the project and function for you. 
+        iii. Startup the tutorial again at step 3 on this page, which is switch to VSCode Explorer (Left icon navigation bar -- the top icon that looks like two sheets of paper).
+        iv.  When all is good, click on the "I created the function" button to proceed.
+    c. Examine the Python code files in Visual Studio Code page. 
+        i.   Carefully read through this section, keeping in mind OUR FILE CONTENT WILL BE SOMEWHAT DIFFERENT because we are using the Service Bus Queue binding instead of the HTTP trigger binding.   
+        ii.  When all is good, click the "I examined the code files" button to proceed.          
+    d. Debug the Azure Functions Python code locally page.
+        i.   Like was mentioned earlier, you can see your main code file (where you will write your code) in the EbayTracker\ActivityLoaderApp\ActivityLoader\__init__.py. Use Explorer to navigate there and open the file.
+        ii.  Paste in the following lines of code at the end of the file, MAKING SURE INDENT IS CORRECT:
+    message = msg.get_body().decode('utf-8')
+    print("message = {}".format(message))
+        iii. Set a breakpoint on the last line of code.
+        iv.  So step 1 (ONLY) of the tutorial on this page, then follow the rest of my instructions
+        v.   Hit <F5> to start the debugger. You should get a warning dialog that says "In order to debug, you must select a storage account for internal use...". Click on "Select storage account"
+             At prompt "Select a storage account": you should see the name of the storage account you created before you started the tutorial.  Select that name.
+        vi.  The debugger should start.
+        vii. Go to the Service Bus Explorer app and send a message to the queue.  The debugger should stop on your breakpoint. Check the variables pane, to see the value of your message was loaded to message.
+        viii.Hit <F5> to continue.  You should also see the output of your print statement in the terminal window.
+        ix.  At the top of your program add this import: import json
+        x.   At the end of your program add this code:
+    message_json = json.loads(message)
+    first_name = message_json.get('firstName')
+
+    print ("firstName = {}".format(first_name))
+        xi. In the Service Bus Explorer, send this message to your queue:
+{
+    "firstName": "Randy",
+    "lastName": "Clark",
+    "favoriteColor": "Red",
+    "favoriteCar": "Ferrari"
+}
+        xii. Start the debugger and it should stop at the breakpoint. Verify it reads your name from the file.
