@@ -1,0 +1,63 @@
+https://www.youtube.com/watch?v=2yXfUPwlZTw
+https://www.youtube.com/watch?v=zDTH57IRwMg  (3.1)
+
+
+1. Create New Git Repo on GitHub
+------------------------------
+Name: EbaySearchGUI
+
+2. Use Git Extensions and clone repo to your PC
+---------------------------------------------
+
+3. Install Django using pip
+-------------------------
+	pip install django
+
+	django-admin --version
+
+4. Create a django web project called ebaysearch
+--------------------
+In VS Code Terminal window change to directory c:\git_repos\EbaySearchGUI
+
+	django-admin startproject ebaysearch
+
+In VS Code, 
+	File-->Add Folder To Workspace, select c:\git_repos\EbaySearchGUI\ebaysearch\
+	File-->Save Workspace as... ebaysearch.code-workspace
+
+5. Create the 'search' application inside the ebaysearch project
+----------------------------------------------------------------
+Change to directory c:\git_repos\EbaySearchGUI\ebaysearch\ (cd ebaysearch)
+
+	python manage.py startapp search
+
+Open a new browser window and type in: http://localhost:8000/
+You should see the django rocket and a success message.
+
+6. Create search URLs route (video 8:45)
+-----------------------------
+In ebaysearch urls.py file...
+Add new route as first list element of urlpatterns:
+    path('search/', index),
+Add new import next to the others
+from .views import index
+
+7. Add index function to ebaysearch/views.py
+----------------------------------------
+from django.http import HttpResponse
+
+def index(request):
+    return HttpResponse('Hello World')
+
+8. Push Code to GitHub
+----------------------
+Git Extensions should mention there is no .gitignore. Click the button to edit it.
+Go to ebay tracker, find the .gitignore and copy the contents. Paste into the Git Extensions editor. and save.
+
+
+
+
+
+
+
+
