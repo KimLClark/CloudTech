@@ -97,6 +97,46 @@ Open a new browser window and type in: http://localhost:8000/search. Should say 
 12. End of Part 2. Push Code to GitHub
 --------------------------------------
 
+13. Create Template File
+------------------------
+a. Under the search folder, create a new folder called templates
+b. Under the templates folder, create a new folder called search
+c. Under the search folder, create a new file called index.html
+d. index.html add the following test code:
+<h1>Hello world (from index.html)</h1>
+e. In the search/views.py file replace the return statement of the index function with the following code so the html template is used to render the page instead of the response object:
+    return render(request, 'search/index.html')
+f. Open a browser window and type in: http://localhost:8000/search. Should say hello world (from index.html)
+
+14. Pass variable to template (Video about 27:40)
+------------------------------
+a. In search/views.py index function, create a variable named n and set it to 'Bob'
+b. Change the return to include another argument to render. This argument is a dictionary.
+ return render(request, 'search/index.html', context={'name':n})
+c. In the index.html template, insert a placeholder for the name value. Replace the word world with {{name}}. This is how a variable is inserted into the template. 
+d. Open a browser window and type in: http://localhost:8000/search.
+
+15. Pass variable that is a list of items to a template  (Video about 32:00)
+-------------------------------------------------------
+a. In same views.py file index function, create a variable named animals and set it to ['Zebra', 'Cat', 'Dog']
+b. Update the context dictionary to add another element 'animals':animals
+c. In your index.html page, add the following lines at the end to loop through the animals and display them:
+
+<h1>You passed in the following animals:</h1>
+{% for animal in animals %}
+    <hr>
+    <h4>{{animal}}</h4>
+{% endfor %}
+
+d. Open a browser window and type in: http://localhost:8000/search.
+
+15. End of Template Intro. Push Code to GitHub
+----------------------------------------------
+
+16. Template Inheritance (Video about 32:50)
+------------------------
+
+
 
 
 
