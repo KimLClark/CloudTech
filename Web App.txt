@@ -1,4 +1,4 @@
-https://www.youtube.com/watch?v=2yXfUPwlZTw
+
 https://www.youtube.com/watch?v=zDTH57IRwMg  (3.1)
 
 
@@ -34,29 +34,68 @@ Change to directory c:\git_repos\EbaySearchGUI\ebaysearch\ (cd ebaysearch)
 Open a new browser window and type in: http://localhost:8000/
 You should see the django rocket and a success message.
 
-6. Create search URLs route (video 8:45)
+6. Create search URLs route 
 -----------------------------
 In ebaysearch urls.py file...
 Add new route as first list element of urlpatterns:
-    path('search/', index),
+    path('search/', hello),
 Add new import next to the others
-from .views import index
+from .views import hello
 
 7. Add index function to ebaysearch/views.py
 ----------------------------------------
 from django.http import HttpResponse
 
-def index(request):
+def hello(request):
     return HttpResponse('Hello World')
 
-8. Push Code to GitHub
+8. Test code
+------------
+Stop the server, if running (CTRL-C)
+Start the server, (python manage.py runserver)
+Open a new browser window and type in: http://localhost:8000/search. Should say hello world.
+
+9. Push Code to GitHub
 ----------------------
 Git Extensions should mention there is no .gitignore. Click the button to edit it.
 Go to ebay tracker, find the .gitignore and copy the contents. Paste into the Git Extensions editor. and save.
 
+17:00 in video
 
+10. Route to search app.
+-----------------------
+a. In ebaysearch/setting.py add search to INSTALLED_APPS.
+    'search',
 
+b. In ebaysearch/urls.py import include by adding new import
+from django.urls import include
+in same urls.py file update path for search to forward to search urls.py file.
+    path('search/', include('search.urls')),
 
+c. In the search folder, create a new urls.py file if it does not exist. Paste in the following code:
+from django.urls import path
+
+from .views import index
+
+urlpatterns = [
+    path('', index),
+]
+
+d. In the search folder, create a new views.py file if it does not exist. Create a handler for the search path called index. The handler will be a python function called index. Paste in the following code:
+from django.shortcuts import render
+from django.http import HttpResponse
+
+def index(request):
+    return HttpResponse('Hello World (from search.index)')
+
+11. Test code
+------------
+Stop the server, if running (CTRL-C)
+Start the server, (python manage.py runserver)
+Open a new browser window and type in: http://localhost:8000/search. Should say hello world (from search.index).
+
+12. End of Part 2. Push Code to GitHub
+--------------------------------------
 
 
 
