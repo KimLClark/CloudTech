@@ -1,0 +1,142 @@
+
+https://www.youtube.com/watch?v=zDTH57IRwMg  (3.1)
+
+
+1. Create New Git Repo on GitHub
+------------------------------
+Name: EbaySearchGUI
+
+2. Use Git Extensions and clone repo to your PC
+---------------------------------------------
+
+3. Install Django using pip
+-------------------------
+	pip install django
+
+	django-admin --version
+
+4. Create a django web project called ebaysearch
+--------------------
+In VS Code Terminal window change to directory c:\git_repos\EbaySearchGUI
+
+	django-admin startproject ebaysearch
+
+In VS Code, 
+	File-->Add Folder To Workspace, select c:\git_repos\EbaySearchGUI\ebaysearch\
+	File-->Save Workspace as... ebaysearch.code-workspace
+
+5. Create the 'search' application inside the ebaysearch project
+----------------------------------------------------------------
+Change to directory c:\git_repos\EbaySearchGUI\ebaysearch\ (cd ebaysearch)
+
+	python manage.py startapp search
+
+Open a new browser window and type in: http://localhost:8000/
+You should see the django rocket and a success message.
+
+6. Create search URLs route 
+-----------------------------
+In ebaysearch urls.py file...
+Add new route as first list element of urlpatterns:
+    path('search/', hello),
+Add new import next to the others
+from .views import hello
+
+7. Add index function to ebaysearch/views.py
+----------------------------------------
+from django.http import HttpResponse
+
+def hello(request):
+    return HttpResponse('Hello World')
+
+8. Test code
+------------
+Stop the server, if running (CTRL-C)
+Start the server, (python manage.py runserver)
+Open a new browser window and type in: http://localhost:8000/search. Should say hello world.
+
+9. Push Code to GitHub
+----------------------
+Git Extensions should mention there is no .gitignore. Click the button to edit it.
+Go to ebay tracker, find the .gitignore and copy the contents. Paste into the Git Extensions editor. and save.
+
+17:00 in video
+
+10. Route to search app.
+-----------------------
+a. In ebaysearch/setting.py add search to INSTALLED_APPS.
+    'search',
+
+b. In ebaysearch/urls.py import include by adding new import
+from django.urls import include
+in same urls.py file update path for search to forward to search urls.py file.
+    path('search/', include('search.urls')),
+
+c. In the search folder, create a new urls.py file if it does not exist. Paste in the following code:
+from django.urls import path
+
+from .views import index
+
+urlpatterns = [
+    path('', index),
+]
+
+d. In the search folder, create a new views.py file if it does not exist. Create a handler for the search path called index. The handler will be a python function called index. Paste in the following code:
+from django.shortcuts import render
+from django.http import HttpResponse
+
+def index(request):
+    return HttpResponse('Hello World (from search.index)')
+
+11. Test code
+------------
+Stop the server, if running (CTRL-C)
+Start the server, (python manage.py runserver)
+Open a new browser window and type in: http://localhost:8000/search. Should say hello world (from search.index).
+
+12. End of Part 2. Push Code to GitHub
+--------------------------------------
+
+13. Create Template File
+------------------------
+a. Under the search folder, create a new folder called templates
+b. Under the templates folder, create a new folder called search
+c. Under the search folder, create a new file called index.html
+d. index.html add the following test code:
+<h1>Hello world (from index.html)</h1>
+e. In the search/views.py file replace the return statement of the index function with the following code so the html template is used to render the page instead of the response object:
+    return render(request, 'search/index.html')
+f. Open a browser window and type in: http://localhost:8000/search. Should say hello world (from index.html)
+
+14. Pass variable to template (Video about 27:40)
+------------------------------
+a. In search/views.py index function, create a variable named n and set it to 'Bob'
+b. Change the return to include another argument to render. This argument is a dictionary.
+ return render(request, 'search/index.html', context={'name':n})
+c. In the index.html template, insert a placeholder for the name value. Replace the word world with {{name}}. This is how a variable is inserted into the template. 
+d. Open a browser window and type in: http://localhost:8000/search.
+
+15. Pass variable that is a list of items to a template  (Video about 32:00)
+-------------------------------------------------------
+a. In same views.py file index function, create a variable named animals and set it to ['Zebra', 'Cat', 'Dog']
+b. Update the context dictionary to add another element 'animals':animals
+c. In your index.html page, add the following lines at the end to loop through the animals and display them:
+
+<h1>You passed in the following animals:</h1>
+{% for animal in animals %}
+    <hr>
+    <h4>{{animal}}</h4>
+{% endfor %}
+
+d. Open a browser window and type in: http://localhost:8000/search.
+
+15. End of Template Intro. Push Code to GitHub
+----------------------------------------------
+
+16. Template Inheritance (Video about 32:50)
+------------------------
+
+
+
+
+

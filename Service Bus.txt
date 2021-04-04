@@ -1,0 +1,6 @@
+Python Service Bus Library
+
+Google Search: python azure service bus
+
+
+eBay results are returned as python dict.  To convert from python dict to json (format needed to send to Service Bus), 1) add "import json" at top. 2) use json.dumps(dict) to do the conversion.
